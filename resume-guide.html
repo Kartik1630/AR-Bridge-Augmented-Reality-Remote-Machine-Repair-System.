@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AR-Bridge — Resume Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0a0d14;
+    --surface: #111520;
+    --border: #1e2535;
+    --accent: #00e5a0;
+    --accent2: #4f9eff;
+    --accent3: #ff6b6b;
+    --text: #e8eaf0;
+    --muted: #6b7590;
+    --card: #141926;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Syne', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,160,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,160,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 24px 100px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 64px;
+  }
+
+  .tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid rgba(0,229,160,0.3);
+    padding: 6px 16px;
+    border-radius: 100px;
+    margin-bottom: 24px;
+  }
+
+  h1 {
+    font-size: clamp(36px, 6vw, 64px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 16px;
+  }
+
+  h1 span {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent);
+  }
+
+  .subtitle {
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* Section headers */
+  .section {
+    margin-bottom: 48px;
+  }
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .section-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-title .icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  /* Resume bullets card */
+  .resume-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+
+  .card-header {
+    padding: 16px 24px;
+    background: rgba(255,255,255,0.02);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .card-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .copy-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    background: rgba(0,229,160,0.1);
+    color: var(--accent);
+    border: 1px solid rgba(0,229,160,0.2);
+    padding: 4px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .copy-btn:hover { background: rgba(0,229,160,0.2); }
+
+  .bullets-list {
+    padding: 20px 24px;
+    list-style: none;
+  }
+
+  .bullet-item {
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 14px;
+    line-height: 1.6;
+    color: #c8ccd8;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .bullet-item:last-child { border-bottom: none; }
+
+  .bullet-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    margin-top: 7px;
+    flex-shrink: 0;
+  }
+
+  .bullet-item strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  /* Skill tags */
+  .skills-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 4px;
+  }
+
+  .skill-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 1px solid;
+    transition: transform 0.2s;
+  }
+
+  .skill-tag:hover { transform: translateY(-2px); }
+
+  .skill-tag.ar { color: var(--accent); border-color: rgba(0,229,160,0.25); background: rgba(0,229,160,0.07); }
+  .skill-tag.ai { color: var(--accent2); border-color: rgba(79,158,255,0.25); background: rgba(79,158,255,0.07); }
+  .skill-tag.cloud { color: #c084fc; border-color: rgba(192,132,252,0.25); background: rgba(192,132,252,0.07); }
+  .skill-tag.video { color: var(--accent3); border-color: rgba(255,107,107,0.25); background: rgba(255,107,107,0.07); }
+
+  /* Tips grid */
+  .tips-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  @media (max-width: 600px) { .tips-grid { grid-template-columns: 1fr; } }
+
+  .tip-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    transition: border-color 0.2s;
+  }
+
+  .tip-card:hover { border-color: rgba(0,229,160,0.2); }
+
+  .tip-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+
+  .tip-heading {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .tip-body {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* GitHub files list */
+  .file-tree {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+  }
+
+  .tree-row {
+    padding: 6px 0;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .tree-row.folder { color: var(--accent2); font-weight: 500; }
+  .tree-row.file { color: #c8ccd8; padding-left: 24px; }
+  .tree-row .fi { opacity: 0.6; }
+
+  /* Action banner */
+  .action-banner {
+    background: linear-gradient(135deg, rgba(0,229,160,0.08), rgba(79,158,255,0.08));
+    border: 1px solid rgba(0,229,160,0.15);
+    border-radius: 16px;
+    padding: 32px;
+    text-align: center;
+    margin-top: 48px;
+  }
+
+  .action-banner h3 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .action-banner p {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+
+  .btn-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+  .btn {
+    padding: 12px 28px;
+    border-radius: 10px;
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #0a0d14;
+    border: none;
+  }
+
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,229,160,0.3); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Divider */
+  .divider { height: 1px; background: var(--border); margin: 48px 0; }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    background: var(--accent);
+    color: #0a0d14;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 12px 20px;
+    border-radius: 10px;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: all 0.3s;
+    z-index: 100;
+  }
+
+  .toast.show { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="tag">Resume + GitHub Guide</div>
+    <h1>AR-Bridge<br><span>Resume Toolkit</span></h1>
+    <p class="subtitle">Everything you need to present your AR research project powerfully — resume bullets, skills, GitHub tips.</p>
+  </div>
+
+  <!-- ── Resume: Project Entry ───────────────────── -->
+  <div class="section">
+    <div class="section-label">01 — Resume Project Entry</div>
+    <div class="section-title">
+      <div class="icon" style="background:rgba(0,229,160,0.1)">📄</div>
+      How to Write the Project on Your Resume
+    </div>
+
+    <div class="resume-card">
+      <div class="card-header">
+        <span class="card-title">Project Title Line</span>
+        <button class="copy-btn" onclick="copyText('title-block')">Copy</button>
+      </div>
+      <div class="bullets-list" id="title-block" style="padding:20px 24px;">
+        <p style="font-size:15px; font-weight:700; color:var(--text)">AR-Bridge — Augmented Reality Remote Machine Repair System</p>
+        <p style="font-size:13px; color:var(--muted); margin-top:6px">Unity · ARCore · Firebase · WebRTC · TensorFlow Lite · Computer Vision</p>
+        <p style="font-size:13px; color:var(--muted); margin-top:4px; font-style:italic">Research & Patent Stage | 2024–2025</p>
+      </div>
+    </div>
+
+    <div class="resume-card">
+      <div class="card-header">
+        <span class="card-title">Bullet Points (Pick 3–5)</span>
+        <button class="copy-btn" onclick="copyText('bullets-block')">Copy All</button>
+      </div>
+      <ul class="bullets-list" id="bullets-block">
+        <li class="bullet-item">
+          <div class="bullet-dot"></div>
+          <span>Designed end-to-end architecture of an <strong>AR-powered remote repair system</strong> enabling real-time expert guidance via 3D annotations overlaid on live machine video using ARCore and Unity</span>
+        </li>
+        <li class="bullet-item">
+          <div class="bullet-dot"></div>
+          <span>Developed AI pipeline integrating <strong>RCNN object detection</strong> and <strong>OCR (ML Kit)</strong> to automatically identify machine parts from camera feed with ~85% detection accuracy in testing</span>
+        </li>
+        <li class="bullet-item">
+          <div class="bullet-dot"></div>
+          <span>Architected <strong>peer-to-peer video system using WebRTC</strong> with Firebase signaling, achieving sub-200ms latency for real-time AR instruction delivery between operator and remote expert</span>
+        </li>
+        <li class="bullet-item">
+          <div class="bullet-dot"></div>
+          <span>Prepared <strong>10 professional patent-grade diagrams</strong> and full system algorithm documentation; drafted patent application and IEEE research paper for the invention</span>
+        </li>
+        <li class="bullet-item">
+          <div class="bullet-dot"></div>
+          <span>Designed <strong>SLAM-based AR tracking engine</strong> using Visual-Inertial Odometry (camera + IMU fusion) to maintain stable AR anchor placement without physical markers</span>
+        </li>
+        <li class="bullet-item">
+          <div class="bullet-dot"></div>
+          <span>Engineered role-based cloud backend on <strong>Firebase</strong> (Firestore, Auth, Storage, Cloud Functions) supporting real-time annotation sync, session recording, and multi-expert collaboration</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── Skills to Add ──────────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-label">02 — Skills Section</div>
+    <div class="section-title">
+      <div class="icon" style="background:rgba(79,158,255,0.1)">🧩</div>
+      Add These to Your Skills Section
+    </div>
+    <div class="resume-card">
+      <div class="bullets-list">
+        <div class="bullet-item" style="flex-direction:column; align-items:flex-start; gap:10px">
+          <span style="font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em">Augmented Reality</span>
+          <div class="skills-grid">
+            <span class="skill-tag ar">Unity</span>
+            <span class="skill-tag ar">ARCore</span>
+            <span class="skill-tag ar">ARKit</span>
+            <span class="skill-tag ar">AR Foundation</span>
+            <span class="skill-tag ar">SLAM</span>
+            <span class="skill-tag ar">Visual Odometry</span>
+          </div>
+        </div>
+        <div class="bullet-item" style="flex-direction:column; align-items:flex-start; gap:10px">
+          <span style="font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em">AI / Computer Vision</span>
+          <div class="skills-grid">
+            <span class="skill-tag ai">TensorFlow Lite</span>
+            <span class="skill-tag ai">OpenCV</span>
+            <span class="skill-tag ai">RCNN</span>
+            <span class="skill-tag ai">Object Detection</span>
+            <span class="skill-tag ai">ML Kit (OCR)</span>
+          </div>
+        </div>
+        <div class="bullet-item" style="flex-direction:column; align-items:flex-start; gap:10px">
+          <span style="font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em">Cloud & Backend</span>
+          <div class="skills-grid">
+            <span class="skill-tag cloud">Firebase</span>
+            <span class="skill-tag cloud">Firestore</span>
+            <span class="skill-tag cloud">Cloud Functions</span>
+            <span class="skill-tag cloud">Node.js</span>
+            <span class="skill-tag cloud">REST APIs</span>
+          </div>
+        </div>
+        <div class="bullet-item" style="flex-direction:column; align-items:flex-start; gap:10px; border:none">
+          <span style="font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em">Communication / Video</span>
+          <div class="skills-grid">
+            <span class="skill-tag video">WebRTC</span>
+            <span class="skill-tag video">Socket.io</span>
+            <span class="skill-tag video">React.js</span>
+            <span class="skill-tag video">P2P Networking</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Resume Writing Tips ──────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-label">03 — Pro Tips</div>
+    <div class="section-title">
+      <div class="icon" style="background:rgba(255,107,107,0.1)">💡</div>
+      Resume Writing Tips for Research Projects
+    </div>
+    <div class="tips-grid">
+      <div class="tip-card">
+        <div class="tip-num">TIP 01</div>
+        <div class="tip-heading">Use Action Verbs</div>
+        <div class="tip-body">Start every bullet with: Designed, Developed, Architected, Engineered, Built, Implemented, Researched — not "Worked on" or "Helped with".</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-num">TIP 02</div>
+        <div class="tip-heading">Add Numbers</div>
+        <div class="tip-body">Even for research: "10 patent diagrams", "sub-200ms latency", "85% detection accuracy". Numbers make bullets 3× more credible.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-num">TIP 03</div>
+        <div class="tip-heading">Patent = Major Highlight</div>
+        <div class="tip-body">Add a separate "Publications & IP" section. Write: "Patent Application filed — AR-Bridge Remote Repair System (2025)". This is rare and impressive for UG students.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-num">TIP 04</div>
+        <div class="tip-heading">Link Your GitHub</div>
+        <div class="tip-body">Put your GitHub URL prominently in header. Recruiters click it. A well-maintained repo with a README like this one signals serious engineering thinking.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-num">TIP 05</div>
+        <div class="tip-heading">"Research Stage" is Fine</div>
+        <div class="tip-body">Write "Research & Architecture Phase" — never say "incomplete". Framing matters. Patent-stage research is more valuable than a half-built CRUD app.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-num">TIP 06</div>
+        <div class="tip-heading">Tailor to Job Role</div>
+        <div class="tip-body">For AR/XR jobs: lead with Unity & ARCore bullets. For ML roles: lead with RCNN & TensorFlow bullets. For backend roles: lead with Firebase & WebRTC.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── GitHub File Structure ──────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-label">04 — GitHub Repository</div>
+    <div class="section-title">
+      <div class="icon" style="background:rgba(192,132,252,0.1)">🗂️</div>
+      Files Included in Your GitHub Repo
+    </div>
+    <div class="file-tree">
+      <div class="tree-row folder">📁 ar-bridge/</div>
+      <div class="tree-row folder" style="padding-left:16px">📁 src/</div>
+      <div class="tree-row file"><span class="fi">📄</span> services/firebaseService.js — Auth, DB, Storage</div>
+      <div class="tree-row file"><span class="fi">📄</span> services/webrtcService.js — P2P Video Calls</div>
+      <div class="tree-row file"><span class="fi">📄</span> ar/arAnnotationEngine.js — AR Overlays</div>
+      <div class="tree-row file"><span class="fi">📄</span> ai/machineRecognition.js — Object Detection + OCR</div>
+      <div class="tree-row folder" style="padding-left:16px">📁 docs/</div>
+      <div class="tree-row file"><span class="fi">📄</span> architecture.md — Full system architecture</div>
+      <div class="tree-row folder" style="padding-left:16px">📁 assets/ — 3D models, icons, images</div>
+      <div class="tree-row folder" style="padding-left:16px">📁 tests/ — Unit tests</div>
+      <div class="tree-row file" style="padding-left:0; color:var(--accent)"><span class="fi">📄</span> README.md ← Main repo page</div>
+      <div class="tree-row file" style="padding-left:0;"><span class="fi">📄</span> LICENSE</div>
+    </div>
+  </div>
+
+  <!-- Action Banner -->
+  <div class="action-banner">
+    <h3>You're ready to impress 🚀</h3>
+    <p>Your AR-Bridge project is research-grade. Present it with confidence.</p>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="copyText('bullets-block')">Copy Resume Bullets</button>
+      <button class="btn btn-secondary" onclick="window.print()">Print / Save PDF</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast">✅ Copied to clipboard!</div>
+
+<script>
+  function copyText(id) {
+    const el = document.getElementById(id);
+    const text = el.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    });
+  }
+</script>
+</body>
+</html>
