@@ -171,12 +171,10 @@ ar-bridge/
 
 ---
 
-## 👨‍💻 Author
-
-**[Your Name]**
+## 👨‍💻 Kartik Shinde*
 UG/PG Student | AR Systems Researcher
-📧 your.email@example.com
-🔗 [LinkedIn](https://linkedin.com) | [Portfolio](https://yourportfolio.com)
+📧 shindekartik41@gmailcom
+🔗www.linkedin.com/in/kartik-s-37b968260/ (https://github.com/Kartik1630)
 
 ---
 
